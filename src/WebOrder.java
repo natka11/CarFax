@@ -3,6 +3,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import static org.testng.Assert.*;
 import org.openqa.selenium.By;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import java.util.Random;
@@ -83,8 +88,8 @@ public class WebOrder {
 //10. Generate and Enter random state
 
         String[] state = new String[]{"DC", "VA", "NY", "MA", "NJ", "IL", "CA", "CO", "AZ", "TX"};
-        String stateName = city[new Random().nextInt(lastName.length)];
-        driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox4")).sendKeys(stateName);
+        String stateName = state[new Random().nextInt(lastName.length)];
+        driver.findElement(By.name("ctl00$MainContent$fmwOrder$TextBox4")).sendKeys(stateName);
 
 //11.Generate and Enter a random 5 digit zip code
         String num = "0123456789";
@@ -99,46 +104,45 @@ public class WebOrder {
 //12.Select the card type randomly. On each run your script should select a random type.
 
         List<WebElement> radioButtons = driver.findElements(By.cssSelector("input[type='radio']"));
-
         int randomNo = (int) (Math.random() * radioButtons.size());
-
         radioButtons.get(randomNo).click();
+        String radioButton = radioButtons.get(randomNo).getText();
 
 // 13. Generate and enter the random card number
         String num2 = "0123456789";
-        String MasterCard = "";
-        String Visa = "";
-        String AMEX = "";
+        String card ="";
         if ( randomNo == 0 ) {
             for (int i = 0; i < 16; i++) {
                 Random random5 = new Random();
                 int randomIndex1 = random5.nextInt(num.length());
-                Visa += (num.charAt(randomIndex1));}
-                String cardVisa = "4" + Visa;
-                driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardVisa);
+                card += (num.charAt(randomIndex1));}
+                String cardVisa = "4" + card;
+     driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardVisa);
         } else if ( randomNo == 1 ) {
             for (int i = 0; i < 16; i++) {
                 Random random6 = new Random();
                 int randomIndex1 = random6.nextInt(num.length());
-                MasterCard += (num.charAt(randomIndex1));}
-                String cardMaterCard = "5" + MasterCard;
+                card += (num.charAt(randomIndex1));}
+                String cardMaterCard = "5" + card;
                 driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardMaterCard );
         } else if ( randomNo == 2 ) {
             for (int i = 0; i < 14; i++) {
                 Random random7 = new Random();
                 int randomIndex1 = random7.nextInt(num.length());
-                AMEX += (num.charAt(randomIndex1));}
-                String cardAMEX = "3" + AMEX;
+                card+= (num.charAt(randomIndex1));}
+                String cardAMEX = "3" + card;
                 driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardAMEX);
             }
 
 // 14. Enter a valid expiration date (newer than the current date)
 
-        driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox1")).sendKeys("11/22");
+        String expirationDate = "11/22";
+        driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox1")).sendKeys(expirationDate);
 
 //15.Click on Process
 
         driver.findElement(By.id("ctl00_MainContent_fmwOrder_InsertButton")).click();
+
 //16.Verify that “New order has been successfully added” message appeared on the page.
 
         String expectedText = "New order has been successfully added";
@@ -155,23 +159,34 @@ public class WebOrder {
 // Verify that the entire information contained on the row (Name, Product, Quantity, etc)
 // matches the previously entered information in previous steps.
 
-        String firstAndLastName = fullName;
-        String street1 = address;
-        String city1 = cityName;
-        String state1 = stateName;
+        String product = driver.findElement(By.id("ctl00_MainContent_fmwOrder_ddlProduct")).getText();
 
+        LocalDate date = LocalDate.now();
+        String currentDate = date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 
-        String pageSource1 = driver.getPageSource();
-        assertTrue(pageSource1.contains(firstAndLastName));
-        assertTrue(pageSource1.contains(street1));
-        assertTrue(pageSource1.contains(city1));
-        assertTrue(pageSource1.contains(state1));
+        List<WebElement> firstRow = driver.findElements(By.xpath("//table[@id]//tbody//tr[2]//td"));
+        List<String>actualList = getText(firstRow);
+        List<String> expectedList = new ArrayList<>
+                (Arrays.asList(fullName,product,str,currentDate,streetName,str4,radioButton,card,expirationDate));
+
+          assertEquals(actualList,expectedList);
 
 //19. Log out of the application
-        driver.findElement(By.id("ctl00_logout")).click();
+      driver.findElement(By.id("ctl00_logout")).click();
+      driver.quit();
 
-        driver.quit();
+        }
 
+        public static List<String>getText(List<WebElement> list) {
+
+        List<String > acutal = new ArrayList<>();
+
+        for(WebElement element : list){
+            String text =  element.getText();
+            if(!text.isEmpty()){
+                acutal.add(text);
+            }
+        } return acutal;
         }
     }
 

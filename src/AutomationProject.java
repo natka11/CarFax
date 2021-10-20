@@ -1,3 +1,4 @@
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.TagName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -78,11 +79,11 @@ public class AutomationProject {
 
         driver.findElement(By.id("nameFirstAndLast")).click();
         Thread.sleep(1000);
-        WebElement element = driver.findElement(By.className("userInfo"));
-        assertEquals(element,"Betty Smith");
-        Thread.sleep(1000);
+        WebElement element = driver.findElement(By.tagName("h1"));
+        assertEquals(element.getText(),"Betty Smith");
+        Thread.sleep(2000);
         driver.findElement(By.id("rafael")).click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
  //9.  Verify that you are logged out by verifying the URL is:
         //http://duotifyapp.us-east-2.elasticbeanstalk.com/register.php
