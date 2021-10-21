@@ -111,6 +111,7 @@ public class WebOrder {
 // 13. Generate and enter the random card number
         String num2 = "0123456789";
         String card = "";
+        String cardNum ="";
         String cardName ="";
         if ( randomNo == 0 ) {
             for (int i = 0; i < 16; i++) {
@@ -119,8 +120,8 @@ public class WebOrder {
                 card += (num.charAt(randomIndex1));
                 cardName = "Visa";
             }
-            String cardVisa = "4" + card;
-            driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardVisa);
+            cardNum = "4" + card;
+            driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardNum);
         } else if ( randomNo == 1 ) {
             for (int i = 0; i < 16; i++) {
                 Random random6 = new Random();
@@ -128,8 +129,8 @@ public class WebOrder {
                 card += (num.charAt(randomIndex1));
                 cardName = "MaterCard";
             }
-            String cardMaterCard = "5" + card;
-            driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardMaterCard);
+            cardNum = "5" + card;
+            driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardNum);
         } else if ( randomNo == 2 ) {
             for (int i = 0; i < 14; i++) {
                 Random random7 = new Random();
@@ -137,8 +138,8 @@ public class WebOrder {
                 card += (num.charAt(randomIndex1));
                 cardName = "American Express";
             }
-            String cardAMEX = "3" + card;
-            driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardAMEX);
+           cardNum= "3" + card;
+            driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")).sendKeys(cardNum);
         }
 
 // 14. Enter a valid expiration date (newer than the current date)
@@ -176,7 +177,7 @@ public class WebOrder {
         List<WebElement> firstRow = driver.findElements(By.xpath("//table[@id]//tbody//tr[2]//td"));
         List<String> actualList = getText(firstRow);
         List<String> expectedList = new ArrayList<>
-                (Arrays.asList(fullName, "MyMoney", str, currentDate, address, cityName, stateName,str4, cardName, card, expirationDate));
+                (Arrays.asList(fullName,"MyMoney", str, currentDate, address, cityName, stateName,str4, cardName, cardNum, expirationDate));
 
         assertEquals(actualList, expectedList);
 //        System.out.println(Arrays.toString(new List[]{actualList}));
