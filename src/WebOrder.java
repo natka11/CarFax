@@ -179,8 +179,8 @@ public class WebOrder {
                 (Arrays.asList(fullName, "MyMoney", str, currentDate, address, cityName, stateName,str4, cardName, card, expirationDate));
 
         assertEquals(actualList, expectedList);
-        System.out.println(Arrays.toString(new List[]{actualList}));
-        System.out.println(Arrays.toString(new List[]{expectedList}));
+//        System.out.println(Arrays.toString(new List[]{actualList}));
+//        System.out.println(Arrays.toString(new List[]{expectedList}));
 
 
 
